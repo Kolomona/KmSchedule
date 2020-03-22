@@ -1,0 +1,1 @@
+<div class="flex-end">powered by: <a href="https://software.kolomona.com/kmschedule">KmSchedule</a></div>

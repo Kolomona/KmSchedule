@@ -1,0 +1,40 @@
+.kmScheduleTable {
+    border-style: solid;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.kmCell {
+    color: black;
+    text-align: center;
+    border-style: solid;
+    border-width: thin;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    white-space: nowrap;
+}
+
+.odd:hover {
+    background: #59f442;
+}
+
+.even:hover {
+    background: #59f442;
+}
+
+.headerRow {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.kmName {
+    font-weight: bold;
+}
+
+.odd {
+    background-color: #9dbedd;
+}
+
+.even {
+    background-color: #fff;
+}
