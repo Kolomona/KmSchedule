@@ -42,6 +42,8 @@ KmSchedule has been tested using the following. While it should work with other 
 * Apache
 * php
 * mysql
+* node witn npm
+* composer
 
 
 # Installation
