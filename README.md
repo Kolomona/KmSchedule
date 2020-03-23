@@ -47,5 +47,5 @@ KmSchedule has been tested using the following. While it should work with other 
 
 
 # Installation
-
-TODO:
+See:
+https://github.com/Kolomona/KmSchedule/blob/master/installation.md
