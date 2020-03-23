@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Providers;
+use Illuminate\Database\Schema\Builder; // Import Builder where defaultStringLength method is defined
+
 
 use Illuminate\Support\ServiceProvider;
 
