@@ -27,8 +27,8 @@ There are many excellent tutorials for installing the above software. Google is 
 * Set ownership to web user www-data
 * `sudo chown -R www-data:www-data /var/www/html/kmschedule.com`
 * Set folder permissions
-* `chmod 775 /var/www/html/
-* `chmod 774 /var/www/html/kmschedule.com
+* `sudo chmod 775 /var/www/html/`
+* `sudo chmod 774 /var/www/html/kmschedule.com`
 * Clone the repository
 * `git clone https://github.com/Kolomona/KmSchedule.git /var/www/html/kmschedule.com`
 * set www-data to own the files and folders
