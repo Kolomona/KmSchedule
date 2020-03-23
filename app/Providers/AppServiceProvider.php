@@ -23,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Solves SQLSTATE[42000]: Syntax error or access violation: 1071 Specified key was too long;
+        Builder::defaultStringLength(191); // Update defaultStringLength
+
     }
 }
