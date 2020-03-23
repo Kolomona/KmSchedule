@@ -1,5 +1,6 @@
 <?php
-
+// Was thinking about using this for forced password reseting
+// I may not use this
 namespace App\Http\Middleware;
 
 use App\User;

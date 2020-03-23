@@ -33,20 +33,21 @@
                             {{ Form::password('password', ['placeholder'=>'Password', 'class'=>'form-control' ] ) }}
                         </div>
                         <div class="col-md-6">
-                            <p>Roles (Select only One):</p>
+                            <p>Roles:</p>
+                            
+                            
                             @foreach ($roles as $role)
-                            {{-- TODO: Figure out why radio buttons don't work --}}
+                            
                             @if($role->name == 'admin')
+                            
                                 @can('edit-admins')
                                     {{-- Only admins can Edit an admin --}}
-                                    {{ Form::checkbox('roles[]', $role->id) }}
-                                    {{-- {{ Form::radio('roles[]', $role->id, TRUE) }} --}}
+                                    {{ Form::radio('role', $role->id, $user->Roles()->first()->id == $role->id) }}
                                     {{ Form::label($role->name, ucfirst($role->name)) }}
                                     <br>
                                 @endcan
                             @else
-                                {{ Form::checkbox('roles[]', $role->id) }}
-                                {{-- {{ Form::radio('roles[]', $role->id, TRUE) }} --}}
+                                {{ Form::radio('role', $role->id, $user->Roles()->first()->id == $role->id) }}
                                 {{ Form::label($role->name, ucfirst($role->name)) }}
                                 <br>
                             @endif

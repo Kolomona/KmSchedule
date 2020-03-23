@@ -138,7 +138,9 @@ class UsersController extends Controller
             Session::flash('failure', "Only Admins or Managers can edit employees");
             return redirect()->route('admin.users.index');
         }
-        $user->roles()->sync($request->roles);
+
+        $user->roles()->sync($request->role);
+
         if (!empty($request['password'])) {
             $user->password = Hash::make($request['password']);
         }

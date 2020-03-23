@@ -61,7 +61,7 @@
                                          Only admins can edit admins or delete users
                                          TODO: Enforce this on backend --}}
                                     @can('edit-users')
-                                        @if ($user->roles()->get()->pluck('name')[0] != 'admin')
+                                        @if ($user->roles()->get()->pluck('name')->first() != 'admin')
                                             <a href="{{ route('admin.users.edit', $user->id) }}"><button type="button" class="btn btn-primary float-right">Edit</button></a>
                                         @else
                                         @can('edit-admins')
