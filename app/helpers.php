@@ -34,7 +34,7 @@ function convert_schedule_tohtml($inputText){
           if ($cell=="") {$cell="&nbsp;";}
           // if first row then add css class
           if ($rowCount==1) {
-            $outstring = $outstring.'<td class="headerRow kmCell">'.$cell.'</td>';
+            $outstring = $outstring.'<td class="kmCell headerRow">'.$cell.'</td>';
           }elseif($cellCount==1 || $cellCount== count($cells) ){
               $outstring = $outstring.'<td class="kmName kmCell">'.$cell.'</td>';
             }else{
