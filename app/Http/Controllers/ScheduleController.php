@@ -16,6 +16,8 @@ class ScheduleController extends Controller
         $this->middleware('auth');
     }
 
+
+
     /**
      * Display a listing of the resource.
      *
@@ -25,11 +27,10 @@ class ScheduleController extends Controller
     {
         // Get the most current schedule id
         $schedules = Schedule::all()->sortByDesc("period_date");;
-        if (Schedule::select('*')->first() == null){
+        if (Schedule::select('*')->first() == null) {
             Session::flash('noSchedules', 'There are no schedules in the database yet. Please create one');
             return view('schedule.scheduleEmpty');
         }
-
         // Redirect to the show method
         return view('schedule.scheduleIndex', ["schedules" => $schedules]);
     }
@@ -43,12 +44,14 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        if(Gate::denies('edit-users')){
+        if (Gate::denies('edit-users')) {
             Session::flash('failure', "Only Admins or Managers can edit schedules");
             return redirect()->route('home');
         }
         return view('schedule.scheduleCreate');
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -71,7 +74,7 @@ class ScheduleController extends Controller
         $schedule->schedule = $request->schedule;
         if (isset($schedule->is_draft)) {
             $schedule->is_draft = 1;
-        }else {
+        } else {
             $schedule->is_draft = 0;
         }
 
@@ -84,6 +87,8 @@ class ScheduleController extends Controller
         return redirect()->route('schedule.show', $schedule->id);
     }
 
+
+
     /**
      * Display the specified resource.
      *
@@ -94,9 +99,9 @@ class ScheduleController extends Controller
     // public function show(Schedule $id) // TODO: Play with this later
     {
         // Make sure the id is in range
-        
 
-        if (Schedule::select('*')->first() == null){
+
+        if (Schedule::select('*')->first() == null) {
             Session::flash('noSchedules', 'There are no schedules in the database yet. Please create one');
             return view('schedule.scheduleEmpty');
         }
@@ -111,6 +116,8 @@ class ScheduleController extends Controller
         return view('schedule.schedule', ["schedule" => $schedule]);
     }
 
+
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -121,7 +128,7 @@ class ScheduleController extends Controller
     {
 
         // Only admins or managers can edit schedules
-        if(Gate::denies('edit-users')){
+        if (Gate::denies('edit-users')) {
             Session::flash('failure', "Only Admins or Managers can edit schedules");
             return redirect()->route('home');
         }
@@ -131,6 +138,8 @@ class ScheduleController extends Controller
         //return view('schedule.scheduleEdit', ["schedule" => $schedule]);
         return view('schedule.scheduleEdit')->withSchedule($schedule);
     }
+
+
 
     /**
      * Update the specified resource in storage.
@@ -146,13 +155,13 @@ class ScheduleController extends Controller
             'period_date' => 'required|date_format:Y-m-d',
             'schedule' => 'required'
         ));
-        
+
         // Save data to db
         $schedule = Schedule::find($id);
 
         if (null !== $request->input('is_draft')) {
             $schedule->is_draft = 1;
-        }else {
+        } else {
             $schedule->is_draft = 0;
         }
 
@@ -166,8 +175,9 @@ class ScheduleController extends Controller
         // redirect with flash data to show
 
         return redirect()->route('schedule.show', $schedule->id);
-
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -182,5 +192,19 @@ class ScheduleController extends Controller
 
         Session::flash('success', 'Schedule successfully deleted');
         return redirect()->route('schedule.index');
+    }
+
+
+
+     /**
+     * Display the specified resource for printing.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function print($id)
+    {
+        $schedule = Schedule::find($id);
+        return view('schedule.schedulePrint', ["schedule" => $schedule]);
     }
 }
