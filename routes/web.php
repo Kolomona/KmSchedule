@@ -26,7 +26,7 @@ Route::get('schedule/print/{id}', 'ScheduleController@print')->name('schedule.pr
 Route::resource('schedule', 'ScheduleController');
 
 Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:manage-users')->group(function(){
-    Route::resource('/admin/users', 'UsersController');
+    Route::resource('/users', 'UsersController');
 });
 
 
