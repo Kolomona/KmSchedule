@@ -15,19 +15,26 @@ Basically a digitalocean Ubuntu 18.04 droplet
 
 There are many excellent tutorials for installing the above software. Google is your friend.
 
+**Note: I'm using kmschedule.com as an example, you will need to change it to your site**
 
 * Make a directory for your project to live
 * `mkdir /var/www/html/kmschedule.com`
 * cd into directory
 * `cd /var/www/html/kmschedule.com`
+* Make sure you are in the www-data group
+* You can find your username by typing `whoami`
+* `sudo usermod -a -G www-data YourUserName`
+* Set ownership to web user www-data
+* `sudo chown -R www-data:www-data /var/www/html/kmschedule.com`
+* Set folder permissions
+* `chmod 775 /var/www/html/
+* `chmod 774 /var/www/html/kmschedule.com
 * Clone the repository
 * `git clone https://github.com/Kolomona/KmSchedule.git /var/www/html/kmschedule.com`
 * edit your website.conf file to point it's webroot to the public folder
 * `sudo nano /etc/apache2/sites-available/kmschedule.com.conf`
-* Set ownership to web user www-data
-* `sudo chown -R www-data:www-data public`
 * Make sure the DocumentRoot points to the public folder
-* `DocumentRoot /var/www/html/kmschedule.com/public/public`
+* `DocumentRoot /var/www/html/kmschedule.com/public`
 * Make any other edits that makes sense (again Google is your friend)
 * enable the site
 * `a2ensite kmschedule.com.conf`
@@ -77,7 +84,7 @@ Setup database tables
 * Migrate the database
 * `php artisan migrate`
 * Seed the database (this installs the admin user)
-* php artisan db:seed
+* `php artisan db:seed`
 
 That should be it. Navigate to your site and login
 email is admin@admin.com
@@ -90,5 +97,6 @@ password is password.
 
 
 
-This is a pretty good resource
-https://devmarketer.io/learn/setup-laravel-project-cloned-github-com/
+This is are some  pretty good resource
+* https://devmarketer.io/learn/setup-laravel-project-cloned-github-com/
+* https://stackoverflow.com/questions/30639174/how-to-set-up-file-permissions-for-laravel
