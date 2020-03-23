@@ -31,6 +31,8 @@ There are many excellent tutorials for installing the above software. Google is 
 * `chmod 774 /var/www/html/kmschedule.com
 * Clone the repository
 * `git clone https://github.com/Kolomona/KmSchedule.git /var/www/html/kmschedule.com`
+* set www-data to own the files and folders
+* `sudo chown -r www-data:www-data /var/www/html/kmschedule.com`
 * edit your website.conf file to point it's webroot to the public folder
 * `sudo nano /etc/apache2/sites-available/kmschedule.com.conf`
 * Make sure the DocumentRoot points to the public folder

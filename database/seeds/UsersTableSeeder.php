@@ -27,7 +27,7 @@ class UsersTableSeeder extends Seeder
             'lastName' => 'CHANGEME',
             'nickName' => 'Hefe',
             'active' => '1',
-            'email' => 'kolomona@kmschedule.com',
+            'email' => 'admin@admin.com',
             'password' => Hash::make('password')
         ]);
 
