@@ -5,7 +5,7 @@
 
 
 <div class="col-md-12">
-    <h2>Schedule for {{ $schedule->period_date }}</h2>
+    <h2>Schedule for the week of {{ $schedule->period_date }}</h2>
 
     {{-- Implement later --}}
     @can('edit-schedules')
