@@ -84,7 +84,7 @@
                             
                         </tbody>
                     </table>
-
+                    There are {{$roleCount['admin']}} Admins, {{$roleCount['manager']}} Managers, and {{$roleCount['employee']}} Employees
 
 
                 </div> <!-- end card body-->

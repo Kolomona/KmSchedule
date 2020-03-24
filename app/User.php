@@ -65,4 +65,33 @@ class User extends Authenticatable
 
         return false;
     } 
+
+    public static function getUserRoleCount()
+    {
+        // Search users and count what roles they are
+        // Return an array of roles and counts
+        // ['admin' => '1', 'manager' => '2', 'employee' => '5']
+        $users = User::all();
+        $roles = Role::all();
+        $rolecount = []; 
+
+        
+        // This is a mess and should be fixed
+        foreach ($users as $index=>$user) {
+            foreach ($roles as $index => $role) {
+                
+                if(!array_key_exists($role->name, $rolecount)){
+                    //If Role isn't in the array put it in and set count to 0
+                    $rolecount[$role->name] = 0;
+                }
+                //Get the role of the user being checked this round
+                $userRole = $user->roles()->where('name', $role->name)->first();
+                if($userRole != null && $userRole->name == $role->name){
+                    $rolecount[$role->name] ++;       
+                }
+                
+            }
+        }
+        return [$rolecount];
+    }
 }

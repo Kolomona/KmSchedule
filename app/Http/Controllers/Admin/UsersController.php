@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 use App\User;
 use App\Role;
 use Gate;
 use Session;
 use Exception;
+
 
 class UsersController extends Controller
 {
@@ -27,18 +29,17 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        
+        $roleCount = User::getUserRoleCount()[0];
         if($request['hide_inactive_employees']=='checked'){
             $hide_inactive_employees = true;
         }else{
             $hide_inactive_employees = false;
         }
-        
-        
         $users = User::all();
         return view('admin.users.index')->with([
             'users' => $users,
-            'hide_inactive_employees' => $hide_inactive_employees
+            'hide_inactive_employees' => $hide_inactive_employees,
+            'roleCount' => $roleCount
             ]);
     }
 
@@ -122,7 +123,7 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-        // Only admins or managers can edit users
+        $roleCount = User::getUserRoleCount();
         if (Gate::denies('edit-users')) {
             Session::flash('failure', "Only Admins or Managers can edit employees");
             return redirect()->route('admin.users.index');
@@ -132,7 +133,8 @@ class UsersController extends Controller
 
         return view('admin.users.edit')->with([
             'user' => $user,
-            'roles' => $roles
+            'roles' => $roles,
+            'roleCount' => $roleCount
         ]);
     }
 
@@ -181,6 +183,13 @@ class UsersController extends Controller
     {
         if (Gate::denies('delete-users')) {
             Session::flash('failure', "Only Admins can delete employees");
+            return redirect()->route('admin.users.index');
+        }
+
+        // check if the last admin is being deleted and fail with message
+        // check if deleting own account and fail with message (should solve above problem)
+        if(Auth::user()->name == $user->name){
+            Session::flash('failure', "You cannot delete the account that you are currently logged in with.");
             return redirect()->route('admin.users.index');
         }
         $user->roles()->detach();
