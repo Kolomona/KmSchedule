@@ -147,11 +147,20 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        //
         if (Gate::denies('edit-users')) {
             Session::flash('failure', "Only Admins or Managers can edit employees");
             return redirect()->route('admin.users.index');
         }
-
+        
+        // Check to see if the admin role is being changed
+        if($user->hasRole('admin') && $request->role != 1 && User::getUserRoleCount()[0]['admin'] == 1){
+            Session::flash('failure', "Cannot remove the last admin in the database");
+            return redirect()->route('admin.users.edit', ["user" => $user]);
+            
+        }
+        // If so Check to see if there are any other admins in db
+        // If not then deny the change with message
         $user->roles()->sync($request->role);
 
         if (!empty($request['password'])) {
