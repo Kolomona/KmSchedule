@@ -25,10 +25,21 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        
+        if($request['hide_inactive_employees']=='checked'){
+            $hide_inactive_employees = true;
+        }else{
+            $hide_inactive_employees = false;
+        }
+        
+        
         $users = User::all();
-        return view('admin.users.index')->with('users', $users);
+        return view('admin.users.index')->with([
+            'users' => $users,
+            'hide_inactive_employees' => $hide_inactive_employees
+            ]);
     }
 
     /**

@@ -11,11 +11,13 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="searchEmployee">Search:</label>
-                            <input class="form-control" type="text" name="searchEmployee" id="searchEmployee" value="Not implemented yet">
+                            {{ Form::open(array('url' => 'admin/users', 'name' => "frm_hide_inactive",'id' => "frm_hide_inactive",  'method' => 'GET')) }}
+                            {{ Form::label('searchEmployee', 'Search') }}
+                            <input class="form-control" type="text" name="searchEmployee" id="searchEmployee" placeholder="Not implemented yet">
                             <div class="float-right">
-                                {{ Form::label('hideinactive', 'Hide Inactive Employees: (Not implemented yet)') }}
-                                {{ Form::checkbox('hideinactive', '', false, ['class' => '']) }}    
+                                {{ Form::label('hide_inactive_employees', 'Hide Inactive Employees:') }}
+                                {{ Form::checkbox('hide_inactive_employees', 'checked',  $hide_inactive_employees, ['class' => 'align-middle']) }}
+                                {!! Form::close() !!}   
                             </div>
 
                         </div>
@@ -38,6 +40,10 @@
                         </thead>
                         <tbody>
                             @foreach ($users as $user)
+                            
+                            @if(!$user->active && $hide_inactive_employees == 1)
+                                 @continue
+                            @endIf
                             <tr>
                             <th scope="row">{{ $user->id }}</th>
                                 <td>
@@ -53,9 +59,6 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ ucfirst(implode(', ', $user->roles()->get()->pluck('name')->toArray())) }}</td>
                                 <td>
-                                    @php
-                                        // dd($user->roles()->get()->pluck('name')[0]=='admin');
-                                    @endphp
                                     {{-- Only managers and admins can edit users
                                          Only admins can delete users
                                          Only admins can edit admins or delete users
