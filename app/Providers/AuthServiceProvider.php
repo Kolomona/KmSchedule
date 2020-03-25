@@ -63,5 +63,22 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('delete-schedules', function($user){
             return $user->hasRole('admin');
         });
+
+        // Gates for Locations
+        Gate::define('manage-locations', function($user){
+            return $user->hasAnyRoles(['admin', 'manager']);
+        });
+
+        Gate::define('create-locations', function($user){
+            return $user->hasAnyRoles(['admin', 'manager']);
+        });
+
+        Gate::define('edit-locations', function($user){
+            return $user->hasAnyRoles(['admin', 'manager']);
+        });
+        
+        Gate::define('delete-locations', function($user){
+            return $user->hasRole('admin', 'manager');
+        });
     }
 }

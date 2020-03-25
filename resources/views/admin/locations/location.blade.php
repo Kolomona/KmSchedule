@@ -1,1 +1,1 @@
-This is the schedule show page
+This is the location show page

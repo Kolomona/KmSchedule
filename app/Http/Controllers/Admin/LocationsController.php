@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Location;
 use Illuminate\Http\Request;
+use Session;
+use Gate;
+
+
 
 class LocationsController extends Controller
 {
@@ -15,7 +19,9 @@ class LocationsController extends Controller
      */
     public function index()
     {
-        return view('admin.locations.index');
+        $locations = Location::all();
+        return view('admin.locations.index', ["locations" => $locations]);
+        
     }
 
     /**
@@ -25,7 +31,8 @@ class LocationsController extends Controller
      */
     public function create()
     {
-        //
+
+        return view('admin.locations.create');
     }
 
     /**
@@ -36,7 +43,14 @@ class LocationsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validate the data
+        $this->validate($request, ['name' => 'required']);
+
+        // store in DB
+        $location = new Location;
+        $location->name = $request->name;
+        $location->save();
+        return redirect()->route('admin.locations.index');
     }
 
     /**
@@ -47,7 +61,7 @@ class LocationsController extends Controller
      */
     public function show(Location $location)
     {
-        return view('admin.locations.index');
+        return redirect()->route('admin.locations.index');
     }
 
     /**
@@ -57,8 +71,8 @@ class LocationsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Location $location)
-    {
-        //
+    {   
+        return view('admin.locations.edit')->withLocation($location);
     }
 
     /**
@@ -70,7 +84,14 @@ class LocationsController extends Controller
      */
     public function update(Request $request, Location $location)
     {
-        //
+        // validate the data
+        $this->validate($request, ['name' => 'required']);
+
+        // store in DB
+        
+        $location->name = $request->name;
+        $location->save();
+        return redirect()->route('admin.locations.index');
     }
 
     /**
@@ -81,6 +102,11 @@ class LocationsController extends Controller
      */
     public function destroy(Location $location)
     {
-        //
+        $location = Location::Find($location->id);
+        
+        $location->delete();
+
+        Session::flash('success', "The location: $location->name was successfully deleted forever.");
+        return redirect()->route('admin.locations.index');
     }
 }

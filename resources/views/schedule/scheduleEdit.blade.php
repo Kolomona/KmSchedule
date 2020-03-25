@@ -15,7 +15,7 @@
         <div class="col-md-6" >
             <h3>Currently editing the schedule for <strong>{{ $schedule->period_date }}</strong></h3>
             {{ Form::label('period_date', 'Date:') }}
-            {{ Form::text('period_date', null, array('class' => 'form-control', 'required' => '', 'autocomplete'=> 'off')) }}
+            {{ Form::text('period_date', null, ['class' => 'form-control', 'required' => '', 'autocomplete'=> 'off']) }}
         </div>
         <div class="col-md-6" style="text-align: right;">
             {{-- {{ Form::label('is_draft', 'Save as draft:') }}

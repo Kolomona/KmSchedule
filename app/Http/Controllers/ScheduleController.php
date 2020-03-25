@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Schedule;
 use Illuminate\Contracts\Session\Session as SessionSession;
 use Illuminate\Http\Request;
+use App\Location;
 use Session;
 use Gate;
 
@@ -48,7 +49,9 @@ class ScheduleController extends Controller
             Session::flash('failure', "Only Admins or Managers can edit schedules");
             return redirect()->route('home');
         }
-        return view('schedule.scheduleCreate');
+        $locations = Location::pluck('name', 'id');
+
+        return view('schedule.scheduleCreate', ['locations' => $locations]);
     }
 
 
@@ -61,14 +64,16 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
+        
         // validate the data
-        // dd($request);
         $this->validate($request, array(
             'period_date' => 'required|date_format:Y-m-d',
-            'schedule' => 'required'
+            'schedule' => 'required',
+            'location' => 'required'
         ));
-
+        
         // store in DB
+        $location = Location::find($request->location);
         $schedule = new Schedule;
         $schedule->period_date = $request->period_date;
         $schedule->schedule = $request->schedule;
@@ -77,8 +82,7 @@ class ScheduleController extends Controller
         } else {
             $schedule->is_draft = 0;
         }
-
-        $schedule->save();
+        $location->schedules()->save($schedule);
 
         Session::flash('success', 'The schedule was successfully saved!');
 

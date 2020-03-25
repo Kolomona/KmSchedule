@@ -10,7 +10,10 @@
             {{ Form::text('period_date', null, array('class' => 'form-control', 'required' => '', 'autocomplete'=> 'off')) }}
         </div>
         <div class="col-md-6" style="text-align: right;">
-            {{-- {{ Form::label('is_draft', 'Save as draft:') }}
+            {{ Form::label('location', 'Location:') }}
+            {{ Form::select('location', $locations, null, ['class' => 'form-control', 'required' => '']) }}
+
+            {{--{{ Form::label('is_draft', 'Save as draft:') }}
             {{ Form::checkbox('is_draft', 'is_draft', false,  array('class' => '')) }} --}}
         </div>
     </div>
