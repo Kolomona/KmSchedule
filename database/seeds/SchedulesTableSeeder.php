@@ -17,7 +17,6 @@ class SchedulesTableSeeder extends Seeder
         //factory(App\Schedule::class, 6)->create();
 
         $location1 = Location::where('name','Location 1')->first(); 
-        $location2 = Location::where('name','Location 2')->first();
 
         $location1Schedule = Schedule::create([
             'period_date' => '2020-03-15',
@@ -25,13 +24,8 @@ class SchedulesTableSeeder extends Seeder
             'is_draft' => '0'
         ]);
 
-        $location2Schedule = Schedule::create([
-            'period_date' => '2020-03-15',
-            'schedule' => 'Location 2 Schedule',
-            'is_draft' => '0'
-        ]);
         $location1->schedules()->save($location1Schedule);
-        $location2->schedules()->save($location2Schedule);
+        
 
 
     }

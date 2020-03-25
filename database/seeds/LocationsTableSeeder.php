@@ -14,6 +14,5 @@ class LocationsTableSeeder extends Seeder
     {
         Location::query()->delete();
         Location::create(['name' => 'Location 1']);
-        Location::create(['name' => 'Location 2']);
     }
 }
