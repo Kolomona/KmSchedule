@@ -21,6 +21,7 @@ class CreateSchedulesTable extends Migration
             $table->date('period_date');
             $table->text('schedule');
             $table->integer('is_draft');
+            $table->unique(['location_id', 'period_date']);
         });
     }
 

@@ -30,10 +30,6 @@ class SchedulesTableSeeder extends Seeder
             'schedule' => 'Location 2 Schedule',
             'is_draft' => '0'
         ]);
-        // $quest->levels()->save($level);
-        // $comment = $post->comments()->save($comment);
-        // $location1Schedule->location()->save($location1);
-        // $location2Schedule->location()->save($location2);
         $location1->schedules()->save($location1Schedule);
         $location2->schedules()->save($location2Schedule);
 

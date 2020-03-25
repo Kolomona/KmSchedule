@@ -1,23 +1,24 @@
 @extends('layouts.app')
-
 @section('content')
 
-
-
 <div class="col-md-8 offset-md-2">
-
-
     <br>
 
-
     {!! Form::model($schedule, ['route' => ['schedule.update', $schedule->id], 'method' => 'PUT']) !!}
+    <div class="row-">
+        <div class="col-md-8 offset-md-2">
+            <h3>Editing the schedule for <strong>{{ $schedule->period_date }}</strong></h3>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-6" >
-            <h3>Currently editing the schedule for <strong>{{ $schedule->period_date }}</strong></h3>
+            
             {{ Form::label('period_date', 'Date:') }}
             {{ Form::text('period_date', null, ['class' => 'form-control', 'required' => '', 'autocomplete'=> 'off']) }}
         </div>
         <div class="col-md-6" style="text-align: right;">
+            {{ Form::label('location', 'Location:') }}
+            {{ Form::select('location', $locations, $schedule->location_id, ['class' => 'form-control', 'required' => '']) }}
             {{-- {{ Form::label('is_draft', 'Save as draft:') }}
             {{ Form::checkbox('is_draft', 'is_draft', false,  array('class' => '')) }} --}}
         </div>

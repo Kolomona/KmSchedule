@@ -1,4 +1,5 @@
-@extends('layouts.app') @section('content')
+@extends('layouts.app') 
+@section('content')
 
 <div class="col-md-8 offset-md-2">
     <br />

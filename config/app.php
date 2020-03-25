@@ -175,6 +175,11 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Package Service Providers...
+         */
+        Felixkiss\UniqueWithValidator\ServiceProvider::class,
+
     ],
 
     /*

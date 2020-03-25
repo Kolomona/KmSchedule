@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Location;
 use Session;
 use Gate;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ScheduleController extends Controller
 {
@@ -50,8 +52,10 @@ class ScheduleController extends Controller
             return redirect()->route('home');
         }
         $locations = Location::pluck('name', 'id');
-
+        
         return view('schedule.scheduleCreate', ['locations' => $locations]);
+
+        
     }
 
 
@@ -66,14 +70,15 @@ class ScheduleController extends Controller
     {
         
         // validate the data
-        $this->validate($request, array(
-            'period_date' => 'required|date_format:Y-m-d',
+        $rules = [
+            'period_date' => 'required|unique_with:schedules,location_id',
+            'location' => 'required',
             'schedule' => 'required',
-            'location' => 'required'
-        ));
-        
-        // store in DB
+        ];
+        Validator::make($request->all(), $rules)->validate();
+
         $location = Location::find($request->location);
+        
         $schedule = new Schedule;
         $schedule->period_date = $request->period_date;
         $schedule->schedule = $request->schedule;
@@ -89,6 +94,7 @@ class ScheduleController extends Controller
 
         // redirect to another page
         return redirect()->route('schedule.show', $schedule->id);
+        
     }
 
 
@@ -138,9 +144,10 @@ class ScheduleController extends Controller
         }
 
         $schedule = Schedule::find($id);
-
-        //return view('schedule.scheduleEdit', ["schedule" => $schedule]);
-        return view('schedule.scheduleEdit')->withSchedule($schedule);
+        $locations = Location::pluck('name', 'id');
+        
+        return view('schedule.scheduleEdit', compact('schedule', 'locations'));
+        // return view('schedule.scheduleEdit', ["schedule" => $schedule, "locations" => $locations]);
     }
 
 
@@ -155,14 +162,20 @@ class ScheduleController extends Controller
     public function update(Request $request, $id)
     {
         // Validate data
-        $this->validate($request, array(
-            'period_date' => 'required|date_format:Y-m-d',
-            'schedule' => 'required'
-        ));
-
+        // https://github.com/felixkiss/uniquewith-validator
+        // unique_with Validator Rule For Laravel
+        // '<field1>' => 'unique_with:<table>,<field2>[,<field3>,...,<ignore_rowid>]',
+        // <ignore_rowid> is used for updating
+        $rules = [
+            'period_date' => 'required|unique_with:schedules,location_id,'.$id,
+            'location' => 'required',
+            'schedule' => 'required',
+        ];
+        Validator::make($request->all(), $rules)->validate();
+        
         // Save data to db
         $schedule = Schedule::find($id);
-
+        $location = Location::find($request->location);
         if (null !== $request->input('is_draft')) {
             $schedule->is_draft = 1;
         } else {
@@ -172,7 +185,7 @@ class ScheduleController extends Controller
         $schedule->period_date = $request->input('period_date');
         $schedule->schedule = $request->input('schedule');
 
-        $schedule->save();
+        $location->schedules()->save($schedule); // This seems backwards but it works
 
         // set flash data with success message
         Session::flash('success', "Schedule was successfully updated.");
