@@ -5,8 +5,10 @@
 
 
 <div class="col-md-12">
-    <h2>Schedule for the week of {{ Carbon\Carbon::parse($schedule->period_date)->format('M jS, Y')}}</h2>
-  
+    
+    <h2>{{ $schedule->location()->get()->first()->name }}</h2>
+    Schedule for the week of {{ Carbon\Carbon::parse($schedule->period_date)->format('M jS, Y')}}
+    
     <div class="row">
         <div class="col-md-6">
             <a href="{{ route('schedule.print', ['id' => $schedule->id]) }}" target="_blank">Print</a>

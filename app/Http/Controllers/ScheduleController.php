@@ -121,7 +121,7 @@ class ScheduleController extends Controller
         } else {
             $schedule = Schedule::find($id);
         }
-
+        
 
         return view('schedule.schedule', ["schedule" => $schedule]);
     }

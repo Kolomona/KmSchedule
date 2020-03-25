@@ -44,7 +44,8 @@ class LocationsController extends Controller
     public function store(Request $request)
     {
         // validate the data
-        $this->validate($request, ['name' => 'required']);
+        //unique:table,column,except,idColumn
+        $this->validate($request, ['name' => 'required|unique:locations,name']);
 
         // store in DB
         $location = new Location;
@@ -85,7 +86,8 @@ class LocationsController extends Controller
     public function update(Request $request, Location $location)
     {
         // validate the data
-        $this->validate($request, ['name' => 'required']);
+        // dd($location);
+        $this->validate($request, ['name' => 'required|unique:locations,name,'.$location->id]);
 
         // store in DB
         
