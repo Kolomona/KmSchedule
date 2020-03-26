@@ -94,7 +94,7 @@ class UsersController extends Controller
                 'password' => Hash::make($request['password']),
                 'location_id' => $location->id
             ]);
-            
+
             $user->roles()->sync($request->roles);
             Session::flash('success', "The Employee \"$user->name\" was successfully added");
             // redirect to another page
@@ -110,6 +110,8 @@ class UsersController extends Controller
         return redirect()->route('admin.users.index');
     }
 
+
+    
     /**
      * Display the specified resource.
      *
@@ -136,11 +138,13 @@ class UsersController extends Controller
         }
 
         $roles = Role::all();
+        $locations = Location::pluck('name', 'id');
 
         return view('admin.users.edit')->with([
             'user' => $user,
             'roles' => $roles,
-            'roleCount' => $roleCount
+            'roleCount' => $roleCount,
+            'locations' => $locations,
         ]);
     }
 
@@ -182,7 +186,7 @@ class UsersController extends Controller
         $user->lastName = $request->lastName;
         $user->nickName = $request->nickName;
         $user->email = $request->email;
-        
+        $user->location_id = $request->location;
         $user->save();
         Session::flash('success', "Employee $user->name was successfully updated.");
         return redirect()->route('admin.users.index');

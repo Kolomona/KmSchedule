@@ -22,7 +22,11 @@
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">Period Date</th>
-                                <th scope="col">Location</th>
+                                <th scope="col">
+                                    {{ Form::open(['url' => 'schedule', 'name' => "frm-location-filter",'id' => "frm-location-filter",  'method' => 'GET']) }}
+                                        {{ Form::select('location', $locations, $locationFilter, ['class' => 'form-control', 'required' => '', 'id' => "location-filter"]) }}
+                                    {!! Form::close() !!}
+                                </th>
                                 @can('edit-schedules') <th scope="col">Actions</th> @endcan
                             </tr>
                         </thead>

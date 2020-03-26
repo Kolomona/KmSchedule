@@ -26,16 +26,34 @@ class ScheduleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Get the most current schedule id
-        $schedules = Schedule::all()->sortByDesc("period_date");;
+        
+        if($request->location != null){
+            $locationFilter = (int)$request->location;
+        }else{
+            $locationFilter = auth()->user()->location_id;
+        }
+        // dd($locationFilter, $request->location);
+
+        // get locations, insert an "All locations and " sort
+        $locations = Location::pluck('name', 'id');
+        $locations["0"] = "All Locations";
+        $locations = $locations->sortKeys();
+
+        // Get schedules and filter by prefered location unless locations is in parameters
+        if($locationFilter==0){
+            $schedules = Schedule::all()->sortByDesc("period_date");;
+        }else{
+            $schedules = Schedule::get('*')->where('location_id', $locationFilter)->sortByDesc("period_date");;
+        }
+        
         if (Schedule::select('*')->first() == null) {
             Session::flash('noSchedules', 'There are no schedules in the database yet. Please create one');
             return view('schedule.scheduleEmpty');
         }
         // Redirect to the show method
-        return view('schedule.scheduleIndex', ["schedules" => $schedules]);
+        return view('schedule.scheduleIndex', ["schedules" => $schedules, "locations" => $locations, "locationFilter" => $locationFilter]);
     }
 
 
@@ -110,14 +128,15 @@ class ScheduleController extends Controller
     {
         // Make sure the id is in range
 
-
-        if (Schedule::select('*')->first() == null) {
-            Session::flash('noSchedules', 'There are no schedules in the database yet. Please create one');
+        $user = auth()->user();
+        if (Schedule::select('*')->first() == null || Schedule::select('*')->orderBy('period_date', 'desc')->where('location_id', $user->location_id)->first() == null) {
+            Session::flash('noSchedules', 'There are no schedules for your preferred location yet.');
             return view('schedule.scheduleEmpty');
         }
-
+        
         if ($id == "latest") {
-            $schedule = Schedule::select('*')->orderBy('period_date', 'desc')->first();
+            // get the latest schedule that matches the user's prefered location
+            $schedule = Schedule::select('*')->orderBy('period_date', 'desc')->where('location_id', $user->location_id)->first();
         } else {
             $schedule = Schedule::find($id);
         }

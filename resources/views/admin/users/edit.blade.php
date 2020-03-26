@@ -13,10 +13,6 @@
                     {!! Form::model($user, ['route' => ['admin.users.update', $user->id], 'method' => 'PUT']) !!}
                     <div class="row">
                         <div class="col-md-6">
-                            {{ Form::checkbox('active') }} 
-                            {{ Form::label('active', 'Active Employee?') }}
-                            <br>
-
                             {{ Form::label('name', 'First Name:') }}
                             {{ Form::text('name', null, ['class' => 'form-control', 'required' => '']) }}
 
@@ -52,6 +48,12 @@
                                 <br>
                             @endif
                     @endforeach
+                    <hr>
+                        {{ Form::label('location', 'Prefered Location:') }}
+                        {{ Form::select('location', $locations, $user->location_id, ['class' => 'form-control', 'required' => '']) }}
+                        <hr>
+                        {{ Form::checkbox('active', null, true) }} 
+                        {{ Form::label('active', 'Active Employee?') }}
                         </div>
                     </div> <!-- end row -->
                     {{ Form::submit('Update Employee', array('class' => 'btn btn-success btn-lg btn-block', 'style' => 'margin-top: 20px;')) }}
