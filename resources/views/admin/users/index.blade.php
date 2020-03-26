@@ -34,6 +34,7 @@
                                 <th scope="col">Last Name</th>
                                 <th scope="col">Nickname</th>
                                 <th scope="col">Email</th>
+                                <th scope="col">Prefered Location</th>
                                 <th scope="col">Role</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -57,6 +58,7 @@
                                 <td>{{ $user->lastName }}</td>
                                 <td>{{ $user->nickName }}</td>
                                 <td>{{ $user->email }}</td>
+                                <td>{{ $user->location()->get()->first()->name }}</td>
                                 <td>{{ ucfirst(implode(', ', $user->roles()->get()->pluck('name')->toArray())) }}</td>
                                 <td>
                                     {{-- Only managers and admins can edit users

@@ -12,9 +12,6 @@
                 {!! Form::open(['route' => 'admin.users.store', 'data-parsley-validate']) !!}
                 <div class="row">
                     <div class="col-md-6">
-                        {{ Form::checkbox('active', 'checked', true) }} 
-                        {{ Form::label('active', 'Active Employee?') }}
-                        <br>
                         {{ Form::label('name', 'First Name:') }}
                         {{ Form::text('name', null, ['class' => 'form-control', 'required' => '']) }}
 
@@ -46,6 +43,12 @@
                                     <br>
                                 @endif
                         @endforeach
+                        <hr>
+                        {{ Form::label('location', 'Prefered Location:') }}
+                        {{ Form::select('location', $locations, null, ['class' => 'form-control', 'required' => '']) }}
+                        <hr>
+                        {{ Form::checkbox('active', null, true) }} 
+                        {{ Form::label('active', 'Active Employee?') }}
                     </div>
                 </div>
 

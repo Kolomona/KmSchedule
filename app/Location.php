@@ -10,4 +10,10 @@ class Location extends Model
     {
         return $this->hasMany('App\Schedule');
     }
+
+    public function users()
+    {
+        return $this->hasMany('App\user');
+    }
+
 }

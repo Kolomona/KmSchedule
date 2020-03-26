@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\User;
 use App\Role;
+use App\Location;
 use Gate;
 use Session;
 use Exception;
@@ -52,8 +53,8 @@ class UsersController extends Controller
     {
 
         $roles = Role::all();
-
-        return view('admin.users.create', ['roles' => $roles]);
+        $locations = Location::pluck('name', 'id');
+        return view('admin.users.create', ['roles' => $roles,'locations' => $locations]);
     }
 
     /**
@@ -73,13 +74,17 @@ class UsersController extends Controller
             'password' => 'required',
             'roles' => 'required'
         ));
+
+        $location = Location::find($request['location'])->first();
+
+
         try {
             if (empty($request['active'])) {
                 $active = 0;
             }else{
                 $active = 1;
             }
-            // dd($request['lastName']);
+
             $user = User::create([
                 'name' => $request['name'],
                 'lastName' => $request['lastName'],
@@ -87,6 +92,7 @@ class UsersController extends Controller
                 'active'   => $active,
                 'email'    => $request['email'],
                 'password' => Hash::make($request['password']),
+                'location_id' => $location->id
             ]);
             
             $user->roles()->sync($request->roles);

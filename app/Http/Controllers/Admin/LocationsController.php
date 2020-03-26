@@ -86,7 +86,6 @@ class LocationsController extends Controller
     public function update(Request $request, Location $location)
     {
         // validate the data
-        // dd($location);
         $this->validate($request, ['name' => 'required|unique:locations,name,'.$location->id]);
 
         // store in DB
