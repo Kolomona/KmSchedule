@@ -35,20 +35,22 @@
                             <tr>
                             <th scope="row">{{ $schedule->id }}</th>
                                 <td><a href="{{route('schedule.show', ['schedule' => $schedule->id]) }}">{{ $schedule->period_date }}</a></td>
+                                
                                 <td>{{ $schedule->location()->get()->first()->name }}</td>                          
+
                                 @can('edit-schedules')
                                 <td>
-                                    
                                     {!! Form::open(['route' => ['schedule.destroy', $schedule->id], 'method' => 'DELETE']) !!}
                                     
-                                    <a href="{{ route('schedule.edit', $schedule->id) }}"><button type="button" class="btn btn-primary">Edit</button></a>
+                                    <a href="{{ route('schedule.edit', $schedule->id) }}"><button type="button" class="btn btn-primary form-control col-md-5 offset-md-1">Edit</button></a>
+                                   
                                     @can('delete-schedules')
-                                    {!! Form::submit('Delete', ['class' => 'btn btn-warning']) !!}
+                                    {!! Form::submit('Delete', ['class' => 'btn btn-warning form-control col-md-5']) !!}
                                     @endcan
                                     {!! Form::close() !!}
-                                    
                                 </td>
                                 @endcan
+
                             </tr>
                             @endforeach
                             

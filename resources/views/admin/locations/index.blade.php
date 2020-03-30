@@ -37,10 +37,10 @@
                                 @can('edit-locations')
                                     <td>
                                         
-                                        {!! Form::open(['route' => ['admin.locations.destroy', $location->id], 'method' => 'DELETE']) !!}
-                                        <a href="{{ route('admin.locations.edit', $location->id) }}"><button type="button" class="btn btn-primary">Edit</button></a>
+                                        {!! Form::open(['route' => ['admin.locations.destroy', $location->id], 'method' => 'DELETE'], ['class' => '']) !!}
+                                        <a href="{{ route('admin.locations.edit', $location->id) }}"><button type="button" class="btn btn-primary form-control col-md-5 offet-md-1">Edit</button></a>
                                         @can('delete-locations')
-                                            {!! Form::submit('Delete', ['class' => 'btn btn-warning']) !!}
+                                            {!! Form::submit('Delete', ['class' => 'btn btn-warning form-control col-md-5']) !!}
                                         @endcan
                                         {!! Form::close() !!}
                                         

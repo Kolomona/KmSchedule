@@ -66,17 +66,17 @@
                                          Only admins can edit admins or delete users
                                          TODO: Enforce this on backend --}}
                                     @can('edit-users')
+                                    {!! Form::open(['route' => ['admin.users.destroy', $user->id], 'method' => 'DELETE']) !!}
                                         @if ($user->roles()->get()->pluck('name')->first() != 'admin')
-                                            <a href="{{ route('admin.users.edit', $user->id) }}"><button type="button" class="btn btn-primary float-right">Edit</button></a>
+                                            <a href="{{ route('admin.users.edit', $user->id) }}"><button type="button" class="btn btn-primary col-md-5">Edit</button></a>
                                         @else
                                         @can('edit-admins')
-                                            <a href="{{ route('admin.users.edit', $user->id) }}"><button type="button" class="btn btn-primary float-right">Edit</button></a>
+                                            <a href="{{ route('admin.users.edit', $user->id) }}"><button type="button" class="btn btn-primary col-md-5">Edit</button></a>
                                         @endcan
                                         @endif
-                                        {!! Form::open(['route' => ['admin.users.destroy', $user->id], 'method' => 'DELETE']) !!}
                                         
                                         @can('delete-users')
-                                            {!! Form::submit('Delete', ['class' => 'btn btn-warning float-right']) !!}
+                                            {!! Form::submit('Delete', ['class' => 'btn btn-warning col-md-6']) !!}
                                         @endcan
                                         {!! Form::close() !!}
                                     @endcan
