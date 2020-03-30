@@ -89,7 +89,8 @@ class ScheduleController extends Controller
         
         // validate the data
         $rules = [
-            'period_date' => 'required|unique_with:schedules,location_id',
+            // https://github.com/felixkiss/uniquewith-validator#specify-different-column-names-in-the-database
+            'period_date' => 'required|unique_with:schedules,location = location_id',
             'location' => 'required',
             'schedule' => 'required',
         ];
@@ -186,7 +187,7 @@ class ScheduleController extends Controller
         // '<field1>' => 'unique_with:<table>,<field2>[,<field3>,...,<ignore_rowid>]',
         // <ignore_rowid> is used for updating
         $rules = [
-            'period_date' => 'required|unique_with:schedules,location_id,'.$id,
+            'period_date' => 'required|unique_with:schedules,location = location_id,'.$id,
             'location' => 'required',
             'schedule' => 'required',
         ];
