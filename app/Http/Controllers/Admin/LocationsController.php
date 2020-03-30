@@ -7,6 +7,7 @@ use App\Location;
 use Illuminate\Http\Request;
 use Session;
 use Gate;
+use Alert;
 
 
 
@@ -51,6 +52,7 @@ class LocationsController extends Controller
         $location = new Location;
         $location->name = $request->name;
         $location->save();
+        Alert::toast('The location "'.$location->name.'" was successfully created!', 'success');
         return redirect()->route('admin.locations.index');
     }
 
@@ -92,6 +94,7 @@ class LocationsController extends Controller
         
         $location->name = $request->name;
         $location->save();
+        Alert::toast('The location "'.$location->name.'" was successfully updated!', 'success');
         return redirect()->route('admin.locations.index');
     }
 
@@ -106,8 +109,7 @@ class LocationsController extends Controller
         $location = Location::Find($location->id);
         
         $location->delete();
-
-        Session::flash('success', "The location: $location->name was successfully deleted forever.");
+        Alert::toast('The location "'.$location->name.'" was successfully deleted.', 'success');
         return redirect()->route('admin.locations.index');
     }
 }

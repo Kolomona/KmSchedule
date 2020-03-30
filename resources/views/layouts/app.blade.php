@@ -15,6 +15,7 @@
     </div>
     @include('partials._footer')
     @include('partials._scripts')
+    @include('sweetalert::alert')
 </body>
 
 </html>

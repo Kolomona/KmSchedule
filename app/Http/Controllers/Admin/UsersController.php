@@ -12,6 +12,7 @@ use App\Role;
 use App\Location;
 use Gate;
 use Session;
+use Alert;
 use Exception;
 
 
@@ -96,15 +97,14 @@ class UsersController extends Controller
             ]);
 
             $user->roles()->sync($request->roles);
-            Session::flash('success', "The Employee \"$user->name\" was successfully added");
-            // redirect to another page
-
+            Alert::toast('The Employee '.$user->name.' was successfully added', 'success');
 
         } catch (Exception $exception) {
             if (strpos($exception, 'Duplicate') !== false) {
-                Session::flash('failure', "The Employee was NOT added. Employee name or email already exists");
+                Alert::toast('The Employee was NOT added. Employee name or email already exists', 'error');
+                // Session::flash('failure', "The Employee was NOT added. Employee name or email already exists");
             } else {
-                Session::flash('failure', "Unknown Error: $exception");
+                Alert::toast("Unknown Error: $exception", 'error');
             }
         }
         return redirect()->route('admin.users.index');
@@ -133,7 +133,7 @@ class UsersController extends Controller
     {
         $roleCount = User::getUserRoleCount();
         if (Gate::denies('edit-users')) {
-            Session::flash('failure', "Only Admins or Managers can edit employees");
+            Alert::toast('Only Admins or Managers can edit employees', 'error');
             return redirect()->route('admin.users.index');
         }
 
@@ -159,13 +159,13 @@ class UsersController extends Controller
     {
         //
         if (Gate::denies('edit-users')) {
-            Session::flash('failure', "Only Admins or Managers can edit employees");
+            Alert::toast('Only Admins or Managers can edit employees', 'error');
             return redirect()->route('admin.users.index');
         }
         
         // Check to see if the admin role is being changed
         if($user->hasRole('admin') && $request->role != 1 && User::getUserRoleCount()[0]['admin'] == 1){
-            Session::flash('failure', "Cannot remove the last admin in the database");
+            Alert::toast('Cannot remove the last admin in the database', 'error');
             return redirect()->route('admin.users.edit', ["user" => $user]);
             
         }
@@ -188,7 +188,7 @@ class UsersController extends Controller
         $user->email = $request->email;
         $user->location_id = $request->location;
         $user->save();
-        Session::flash('success', "Employee $user->name was successfully updated.");
+        Alert::toast("Employee \"$user->name $user->lastName\" was successfully updated.", 'success');
         return redirect()->route('admin.users.index');
     }
 
@@ -201,19 +201,19 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         if (Gate::denies('delete-users')) {
-            Session::flash('failure', "Only Admins can delete employees");
+            Alert::toast('Only Admins can delete employees', 'error');
             return redirect()->route('admin.users.index');
         }
 
         // check if the last admin is being deleted and fail with message
         // check if deleting own account and fail with message (should solve above problem)
         if(Auth::user()->name == $user->name){
-            Session::flash('failure', "You cannot delete the account that you are currently logged in with.");
+            Alert::toast('You cannot delete the account that you are currently logged in with.', 'error');
             return redirect()->route('admin.users.index');
         }
         $user->roles()->detach();
         $user->delete();
-        Session::flash('success', "Employee \"$user->name\" was successfully deleted forever.");
+        Alert::toast("Employee \"$user->name $user->lastName\" was successfully deleted forever..", 'error');
         return redirect()->route('admin.users.index');
     }
 
@@ -225,7 +225,7 @@ class UsersController extends Controller
      */
     public function passwordChange(Request $request, User $user)
     {
-        Session::flash('success', "You successfully changed your password. Log out then in again to verify");
+        Alert::toast("You successfully changed your password. Log out then in again to verify", 'success');
         return redirect()->route('admin.users.index');
     }
 }

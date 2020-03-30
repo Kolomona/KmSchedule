@@ -6,10 +6,11 @@ use App\Schedule;
 use Illuminate\Contracts\Session\Session as SessionSession;
 use Illuminate\Http\Request;
 use App\Location;
-use Session;
+// use Session;
 use Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Alert;
 
 class ScheduleController extends Controller
 {
@@ -28,6 +29,7 @@ class ScheduleController extends Controller
      */
     public function index(Request $request)
     {
+        
         
         if($request->location != null){
             $locationFilter = (int)$request->location;
@@ -49,8 +51,14 @@ class ScheduleController extends Controller
         }
         
         if (Schedule::select('*')->first() == null) {
-            Session::flash('noSchedules', 'There are no schedules in the database yet. Please create one');
+            
+            Alert::html('There are no schedules in the database',
+                        "Please add one. <a href='".route('schedule.create')."'>Add New Schedule</a>",
+                        'warning')->autoClose(0); 
+
             return view('schedule.scheduleEmpty');
+
+            
         }
         // Redirect to the show method
         return view('schedule.scheduleIndex', ["schedules" => $schedules, "locations" => $locations, "locationFilter" => $locationFilter]);
@@ -66,7 +74,7 @@ class ScheduleController extends Controller
     public function create()
     {
         if (Gate::denies('edit-users')) {
-            Session::flash('failure', "Only Admins or Managers can edit schedules");
+            Alert::error('ErrorAlert','Only Admins or Managers can edit schedules')->autoClose(10000);
             return redirect()->route('home');
         }
         $locations = Location::pluck('name', 'id');
@@ -107,8 +115,8 @@ class ScheduleController extends Controller
             $schedule->is_draft = 0;
         }
         $location->schedules()->save($schedule);
-
-        Session::flash('success', 'The schedule was successfully saved!');
+        
+        Alert::toast('The schedule was successfully saved!', 'success');
 
 
         // redirect to another page
@@ -128,10 +136,12 @@ class ScheduleController extends Controller
     // public function show(Schedule $id) // TODO: Play with this later
     {
         // Make sure the id is in range
-
+        
         $user = auth()->user();
-        if (Schedule::select('*')->first() == null || Schedule::select('*')->orderBy('period_date', 'desc')->where('location_id', $user->location_id)->first() == null) {
-            Session::flash('noSchedules', 'There are no schedules for your preferred location yet.');
+        if (Schedule::select('*')->first() == null || 
+            Schedule::select('*')->orderBy('period_date', 'desc')->where('location_id', $user->location_id)->first() == null) {
+            
+            Alert::error('ErrorAlert','There are no schedules for your preferred location yet.')->autoClose(10000);
             return view('schedule.scheduleEmpty');
         }
         
@@ -159,7 +169,7 @@ class ScheduleController extends Controller
 
         // Only admins or managers can edit schedules
         if (Gate::denies('edit-users')) {
-            Session::flash('failure', "Only Admins or Managers can edit schedules");
+            Alert::error('Error','Only Admins or Managers can edit schedules')->autoClose(10000);
             return redirect()->route('home');
         }
 
@@ -208,9 +218,8 @@ class ScheduleController extends Controller
         $location->schedules()->save($schedule); // This seems backwards but it works
 
         // set flash data with success message
-        Session::flash('success', "Schedule was successfully updated.");
+        Alert::toast('Schedule was successfully updated.', 'success');
         // redirect with flash data to show
-
         return redirect()->route('schedule.show', $schedule->id);
     }
 
@@ -226,8 +235,7 @@ class ScheduleController extends Controller
     {
         $schedule = Schedule::Find($id);
         $schedule->delete();
-
-        Session::flash('success', 'Schedule successfully deleted');
+        Alert::toast('Schedule successfully deleted!', 'success');
         return redirect()->route('schedule.index');
     }
 
